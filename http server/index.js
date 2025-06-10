@@ -3,11 +3,13 @@ const fs = require("fs")
  
 const server = http.createServer((req, res) => {
     fs.appendFile("log.txt", "New req \n", (err, data) => {
-        if (err) {
-            res.end("Error");
-        } else {
+       switch(req.url) {
+        case "/":
             res.end("Hello World");
-        }
+            break;
+        case "/about":
+            res.end("About");
+       }
     });
 });
 
