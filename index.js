@@ -1,8 +1,14 @@
 const http = require('http');
+const fs = require("fs")
  
 const server = http.createServer((req, res) => {
-    console.log("New req");
-    res.end("Hello World");
+    fs.appendFile("log.txt", "New req \n", (err, data) => {
+        if (err) {
+            res.end("Error");
+        } else {
+            res.end("Hello World");
+        }
+    });
 });
 
 server.listen(3000, () => {
