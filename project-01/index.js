@@ -28,8 +28,8 @@ const userSchema = new mongoose.Schema({
     gender: {
         type : String,
     },
-})
-const User = mongoose.model('user',userSchema)
+});
+const User = mongoose.model('user',userSchema);
 app.use(express.urlencoded({extended: false}));
 
 app.get('/users', (req,res) => {
@@ -52,7 +52,7 @@ app.route('/api/users/:id')
 }).delete((req,res)=>{
     return res.json({status: "pending"});
 });
-app.post('/api/users',(req,res)=>{
+app.post('/api/users',async (req,res)=>{
     const body = req.body;
     if(
         !body ||
@@ -64,12 +64,15 @@ app.post('/api/users',(req,res)=>{
     ){
         return res.status(400).json({msg:"All fields are req..."});
     }
-
-    users.push({...body,id:users.length +1});
-    fs.writeFile('./MOCK_DATA.json',JSON.stringify(users),(err,data)=>{
-       
-        return res.json({status: "success"});
-    });
+    await User.create({
+        firstName : body.first_name,
+        lastName : body.last_name,
+        email : body.email,
+        gender: body.gender,
+        jobTitle :body.job_title,
+    })
+    console.log('resukt')
+    return res.status(201).json({msg: "success"});
 });
 app.get('/api/users', (req,res) => {
    return res.json(users);
