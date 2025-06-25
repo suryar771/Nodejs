@@ -8,7 +8,8 @@ const port = 8000;
 mongoose.connect('mongodb://127.0.0.1:27017/project-01')
 .then(()=> console.log("MongoDB Connected"))
 .catch(err => console.log("Mongo Error",err))
-const userSchema = new mongoose.SchemaType({
+
+const userSchema = new mongoose.Schema({
     firstName:{
         type:String,
         required:true,
@@ -53,6 +54,17 @@ app.route('/api/users/:id')
 });
 app.post('/api/users',(req,res)=>{
     const body = req.body;
+    if(
+        !body ||
+        !body.first_name ||
+        !body.last_name ||
+        !body.email ||
+        !body.gender ||
+        !body.job_title
+    ){
+        return res.status(400).json({msg:"All fields are req..."});
+    }
+
     users.push({...body,id:users.length +1});
     fs.writeFile('./MOCK_DATA.json',JSON.stringify(users),(err,data)=>{
        
