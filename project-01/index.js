@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 
 const port = 8000;
+mongoose.connect('mongodb://127.0.0.1:27017/project-01')
+.then(()=> console.log("MongoDB Connected"))
+.catch(err => console.log("Mongo Error",err))
 const userSchema = new mongoose.SchemaType({
     firstName:{
         type:String,
@@ -25,6 +28,7 @@ const userSchema = new mongoose.SchemaType({
         type : String,
     },
 })
+const User = mongoose.model('user',userSchema)
 app.use(express.urlencoded({extended: false}));
 
 app.get('/users', (req,res) => {
