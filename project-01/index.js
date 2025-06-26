@@ -46,7 +46,7 @@ app.get('/users',async (req,res) => {
 });
 app.route('/api/users/:id')
 .get(async (req,res) => {
-    const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.id);
    if(!user) return res.status(400).json({error: "user not found"});
     return res.json(user);
 
