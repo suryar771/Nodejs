@@ -10,24 +10,26 @@ mongoose.connect('mongodb://127.0.0.1:27017/project-01')
 .catch(err => console.log("Mongo Error",err))
 
 const userSchema = new mongoose.Schema({
-    firstName:{
-        type:String,
-        required:true,
+    firstName: {
+        type: String,
+        required: true,
     },
     lastName: {
-        type:String,
+        type: String,
     },
-    email :{
-        type:String,
-        required:true,
+    email: {
+        type: String,
+        required: true,
         unique: true,
     },
-    jobTitle:{
-        type : String,
+    jobTitle: {
+        type: String,
     },
     gender: {
-        type : String,
-    },
+        type: String,
+    }
+}, {
+    timestamps: true
 });
 const User = mongoose.model('user',userSchema);
 app.use(express.urlencoded({extended: false}));
@@ -64,14 +66,14 @@ app.post('/api/users',async (req,res)=>{
     ){
         return res.status(400).json({msg:"All fields are req..."});
     }
-    await User.create({
+    const result = await User.create({
         firstName : body.first_name,
         lastName : body.last_name,
         email : body.email,
         gender: body.gender,
         jobTitle :body.job_title,
     })
-    console.log('resukt')
+    console.log(result)
     return res.status(201).json({msg: "success"});
 });
 app.get('/api/users', (req,res) => {
