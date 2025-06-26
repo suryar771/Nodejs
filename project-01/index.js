@@ -50,10 +50,12 @@ app.route('/api/users/:id')
    if(!user) return res.status(400).json({error: "user not found"});
     return res.json(user);
 
-}).patch((req,res)=>{
-    return res.json({status: "pending"});
-}).delete((req,res)=>{
-    return res.json({status: "pending"});
+}).patch(async(req,res)=>{
+    await User.findByIdAndUpdate(req.params.id,{lastName : "changedd"});
+    return res.status(200).json({msg:'done'});
+}).delete(async(req,res)=>{
+    await User.findByIdAndDelete(req.params.id);
+    return res.status(200).json({msg:'done'});
 });
 app.post('/api/users',async (req,res)=>{
     const body = req.body;
