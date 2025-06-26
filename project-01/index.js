@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const users = require("./MOCK_DATA.json");
+
 const mongoose = require("mongoose");
 const fs = require("fs");
 
@@ -34,19 +34,20 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('user',userSchema);
 app.use(express.urlencoded({extended: false}));
 
-app.get('/users', (req,res) => {
+app.get('/users',async (req,res) => {
+    const allDbUsers  = await User.find({})
     const html = `
    
     <ul>
-        ${users.map((user) => `<li>${user.first_name} ${user.last_name}</li>`).join('')}
+        ${allDbUsers.map((user) => `<li>${user.firstName} ${user.lastName}</li>`).join('')}
     </ul>
     `;
     return res.send(html);
 });
 app.route('/api/users/:id')
-.get((req,res)=>{
-    const id = Number(req.params.id);
-    const user = users.find((user) => user.id === id);
+.get(async (req,res) => {
+    const user = await User.findById(req.params.id);
+   if(!user) return res.status(400).json({error: "user not found"});
     return res.json(user);
 
 }).patch((req,res)=>{
@@ -76,8 +77,10 @@ app.post('/api/users',async (req,res)=>{
     console.log(result)
     return res.status(201).json({msg: "success"});
 });
-app.get('/api/users', (req,res) => {
-   return res.json(users);
+app.get('/api/users', async (req,res) => {
+    const allDbUsers = await User.find({});
+    return res.json(allDbUsers);
+
 });
 
 
