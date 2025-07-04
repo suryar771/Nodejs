@@ -1,18 +1,6 @@
 const express = require("express");
-const app = express();
-
-const mongoose = require("mongoose");
-const fs = require("fs");
-
-const port = 8000;
-mongoose.connect('mongodb://127.0.0.1:27017/project-01')
-.then(()=> console.log("MongoDB Connected"))
-.catch(err => console.log("Mongo Error",err))
-
-
-app.use(express.urlencoded({extended: false}));
-
-app.get('/users',async (req,res) => {
+const router = express.Router();
+router.get('/users',async (req,res) => {
     const allDbUsers  = await User.find({})
     const html = `
    
@@ -22,7 +10,7 @@ app.get('/users',async (req,res) => {
     `;
     return res.send(html);
 });
-app.route('/api/users/:id')
+router.route('/api/users/:id')
 .get(async (req,res) => {
   const user = await User.findById(req.params.id);
    if(!user) return res.status(400).json({error: "user not found"});
@@ -35,7 +23,7 @@ app.route('/api/users/:id')
     await User.findByIdAndDelete(req.params.id);
     return res.status(200).json({msg:'done'});
 });
-app.post('/api/users',async (req,res)=>{
+router.post('/api/users',async (req,res)=>{
     const body = req.body;
     if(
         !body ||
@@ -57,11 +45,9 @@ app.post('/api/users',async (req,res)=>{
     console.log(result)
     return res.status(201).json({msg: "success"});
 });
-app.get('/api/users', async (req,res) => {
+router.get('/api/users', async (req,res) => {
     const allDbUsers = await User.find({});
     return res.json(allDbUsers);
 
 });
-
-
-app.listen(port, () => {console.log(`Server is running on port ${port}`)});   
+module.exports = router;
