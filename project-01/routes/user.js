@@ -1,16 +1,7 @@
 const express = require("express");
 const router = express.Router();
-router.get('/users',async (req,res) => {
-    const allDbUsers  = await User.find({})
-    const html = `
-   
-    <ul>
-        ${allDbUsers.map((user) => `<li>${user.firstName} ${user.lastName}</li>`).join('')}
-    </ul>
-    `;
-    return res.send(html);
-});
-router.route('/api/users/:id')
+
+router.route('/:id')
 .get(async (req,res) => {
   const user = await User.findById(req.params.id);
    if(!user) return res.status(400).json({error: "user not found"});
@@ -23,7 +14,7 @@ router.route('/api/users/:id')
     await User.findByIdAndDelete(req.params.id);
     return res.status(200).json({msg:'done'});
 });
-router.post('/api/users',async (req,res)=>{
+router.post('/',async (req,res)=>{
     const body = req.body;
     if(
         !body ||
@@ -45,7 +36,7 @@ router.post('/api/users',async (req,res)=>{
     console.log(result)
     return res.status(201).json({msg: "success"});
 });
-router.get('/api/users', async (req,res) => {
+router.get('/', async (req,res) => {
     const allDbUsers = await User.find({});
     return res.json(allDbUsers);
 
