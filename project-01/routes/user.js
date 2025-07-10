@@ -5,6 +5,7 @@ const {getAllUsers,getUserById,updateUserById,deleteUserById,createUser} = requi
 
 router.get('/',getAllUsers);
 
+router.route("/").get(getAllUsers).post(createUser);
 router.route('/:id')
 .get(getUserById)
 .patch(updateUserById)
