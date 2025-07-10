@@ -14,7 +14,7 @@ async function updateUserById(req,res){
     await User.findByIdAndUpdate(req.params.id,{lastName : "changedd"});
     return res.status(200).json({msg:'done'});
 }
-async function deleteUserById(req,res){{
+async function deleteUserById(req,res){
     await User.findByIdAndDelete(req.params.id);
     return res.status(200).json({msg:'done'});
 }
@@ -41,11 +41,11 @@ async function createUser(req,res){
     return res.status(201).json({msg: "success",id: result._id});
 };
 
-}
+
 module.exports ={
     getAllUsers,
     getUserById,
     updateUserById,
     deleteUserById,
     createUser
-};
+}
