@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require('../models/user');
-const {getAllUsers,getUserById,updateUserById,deleteUserById} = require('../controllers/user');
+const {getAllUsers,getUserById,updateUserById,deleteUserById,createUser} = require('../controllers/user');
 
 router.get('/',getAllUsers);
 
@@ -9,31 +9,6 @@ router.route('/:id')
 .get(getUserById)
 .patch(updateUserById)
 .delete(deleteUserById);
-router.post('/',async (req,res)=>{
-    const body = req.body;
-    if(
-        !body ||
-        !body.first_name ||
-        !body.last_name ||
-        !body.email ||
-        !body.gender ||
-        !body.job_title
-    ){
-        return res.status(400).json({msg:"All fields are req..."});
-    }
-    const result = await User.create({
-        firstName : body.first_name,
-        lastName : body.last_name,
-        gender: body.gender,
-        email : body.email,
-        jobTitle :body.job_title,
-    })
-    console.log(result)
-    return res.status(201).json({msg: "success"});
-});
-router.get('/', async (req,res) => {
-    const allDbUsers = await User.find({});
-    return res.json(allDbUsers);
-
-});
+router.post('/',createUser);
+ 
 module.exports = router;
