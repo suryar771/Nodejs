@@ -1,16 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const User = require('../models/user');
-const {getAllUsers,getUserById,updateUserById} = require('../controllers/user');
+const {getAllUsers,getUserById,updateUserById,deleteUserById} = require('../controllers/user');
 
 router.get('/',getAllUsers);
 
 router.route('/:id')
 .get(getUserById)
-.patch(updateUserById).delete(async(req,res)=>{
-    await User.findByIdAndDelete(req.params.id);
-    return res.status(200).json({msg:'done'});
-});
+.patch(updateUserById)
+.delete(deleteUserById);
 router.post('/',async (req,res)=>{
     const body = req.body;
     if(
