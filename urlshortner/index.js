@@ -13,7 +13,11 @@ const PORT = 8001;
 app.use(express.json());
 
 app.use("/url",urlRoute);
-app.get('/:shortId',(req,res)=>{
+app.get('/:shortId',async (req,res)=>{
+    const shortId = req.params.shortId;
+    await URL.findOneAndUpdate({
+        
+    })
 
 })
 
