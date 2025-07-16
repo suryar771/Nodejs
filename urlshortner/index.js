@@ -16,6 +16,7 @@ app.set('views',path.resolve("./views"));
 const PORT = 8001;
 
 app.use(express.json());
+app.use(express.urlencoded({extended:false}));
 
 app.get("/test", async (req, res) => {
     const allUrls = await URL.find({});
