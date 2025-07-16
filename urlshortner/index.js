@@ -8,6 +8,7 @@ const path = require("path");
 connectToMongoDB('mongodb://127.0.0.1:27017/short-url').then(()=> console.log("Mongodb is successfully connected"));
 
 const app = express();
+const staticRouter = require('./router/staticRouter');
 
 app.set("view engine","ejs");
 app.set('views',path.resolve("./views"));
@@ -20,8 +21,10 @@ app.get("/test", async (req, res) => {
     const allUrls = await URL.find({});
     return res.render("home", { urls: allUrls });
 });
-
 app.use("/url",urlRoute);
+
+app.use("/",staticRouter);
+
 app.get('/:shortId', async (req, res) => {
     const shortId = req.params.shortId;
 
